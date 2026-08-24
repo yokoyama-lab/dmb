@@ -871,6 +871,36 @@ def height_fn(K, ni, nj, refine=False):
                          span_key=lambda v: v[1])
 
 
+def arrowed_dmbf(K, ni, nj):
+    """矢印を持つ，回転対称で鋭い離散モースボット関数（帯を 1 つ持ち上げる）。
+
+    最上位の帯（準位 nj-1 と 0 の間）にある **1 次元以上の**セルにだけ値 1 を与え，
+    残り（頂点をすべて含む）は 0 とする。高さ関数（`height_fn`）と同じ
+    Σ_C P_t(C) = P_t(T^2)，R(t) = 0 を与えるが，**矢印を ni 本持つ**点が違う。
+
+    構成の要点（`ni, nj >= 3` で成り立つ。(M1)(M3) は単体的複体なので vacuous）:
+
+    * (MB2): 値が下がる coface があるのは最上位の帯の**横の辺** ie_{nj-1} だけで，
+      その coface は tl_{nj-1}（値 1）と tu_{nj-2}（値 0）なので U^snc = 1。
+      縦の辺 je_{nj-1}・斜めの辺 dg_{nj-1} の coface はどちらも同じ帯の三角形
+      （値 1）なので U^snc = 0。
+    * (MB4): 値が上がる face を持つのは tu_{nj-2} だけで，その辺は
+      je_{nj-2}, dg_{nj-2}（値 0）と ie_{nj-1}（値 1）だから D^snc = 1。
+    * collection は値 0 の部分と値 1 の部分の 2 つ。reduced collection は
+      前者から tu_{nj-2} を，後者から ie_{nj-1} を除いたもので，
+      P_t = 1 + t と t + t^2（`ni, nj <= 7` の範囲で計算して確認）。
+
+    「対称性を保ったまま鋭くする」やり方が高さ関数の形しかないわけではないことを
+    示す例（docs/results.md §3.6）。"""
+    top = nj - 1
+
+    def lifted(c):
+        js = {v[1] % nj for v in c}
+        return len(c) > 1 and top in js and js <= {top, 0}
+
+    return {c: (1 if lifted(c) else 0) for c in K.cells}
+
+
 def morsify(K, f):
     """Morsification: f'(σ) = (D + 1) f(σ) + dim σ  (D = dim K)。
 
@@ -1296,6 +1326,8 @@ def function_catalogue(K, ni, nj):
         "モースボット高さ関数の Morsification（DMF になる）": morsify(K, f_h),
         "臨界セル 4 個の離散モース関数（tree-cotree, 非対称）": canonical_dmf(K),
         f"回転対称な離散モース関数（臨界セル 4·{ni} 個）": invariant_dmf(K, ni, nj),
+        f"矢印 {ni} 本を持つ回転対称で鋭い DMBF（帯を 1 つ持ち上げる）":
+            arrowed_dmbf(K, ni, nj),
     }
     if ni == nj:
         try:

@@ -81,6 +81,7 @@ FUNCTIONS = {
     "dmf_min": "臨界セル 4 個の DMF（tree-cotree・非対称）",
     "dmf_invariant": "回転対称な DMF（臨界セル 4·ni 個）",
     "dmf_py": "dmf.py の calcDMF（正方格子のみ）",
+    "arrowed": "矢印を持つ鋭い DMBF（回転対称・帯を 1 つ持ち上げる）",
 }
 
 
@@ -117,6 +118,8 @@ def build_function(key, K, ni, nj):
         return core.invariant_dmf(K, ni, nj)
     if key == "dmf_py":
         return core.dmf_from_dmf_py(K, ni, nj)
+    if key == "arrowed":
+        return core.arrowed_dmbf(K, ni, nj)
     raise ValueError(key)
 
 

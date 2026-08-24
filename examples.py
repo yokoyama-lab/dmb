@@ -364,9 +364,35 @@ def st4_klein_bottle():
     return ok
 
 
+def st5_arrows_and_sharpness():
+    print(RULE)
+    print("強み 5: 矢印（勾配）と臨界円周は同居できる。しかも鋭いまま。")
+    print("        最上位の帯の 1 次元以上のセルだけ値 1 にする（dmb_core.arrowed_dmbf）。\n")
+    print("  高さ関数（強み 3）は鋭いが矢印を 1 本も持たない。不変な DMF（強み 2）は")
+    print("  矢印を持つが鋭くない。両方を兼ねられるか？ → 兼ねられる。\n")
+    print(f"  {'T(ni,nj)':>10} {'矢印':>6} {'collection':>11} "
+          f"{'Σ_C P_t(C)':>14} {'R(t)':>6}  DMF か")
+    ok = True
+    for ni, nj in ((3, 3), (5, 4), (4, 6)):
+        K = D.torus(ni, nj)
+        r = D.MorseBott(K, D.arrowed_dmbf(K, ni, nj)).report()
+        print(f"  T({ni},{nj})".rjust(12)
+              + f" {r['n_arrows']:>5} {r['collections']:>11} "
+                f"{D.poly_str(r['MB_sum']):>14} {D.poly_str(r['R_MB']):>6}"
+                f"  {'はい' if r['is_dmf'] else 'いいえ'}")
+        ok &= (r["is_dmb"] and not r["is_dmf"] and r["MB_sharp"]
+               and r["n_arrows"] == ni and D.is_invariant(ni, nj,
+                                                          D.arrowed_dmbf(K, ni, nj)))
+    print("\n  reduced collection は高さ関数と同じ 1 + t と t + t^2 の 2 本。")
+    print("  違いは矢印が ni 本あること。全数探索でも，鋭い不変 DMBF の大多数は")
+    print("  矢印を持つ（T(3,3) の値 2 通りで 689 個中 558 個）。docs/results.md §3.6。")
+    return ok
+
+
 TUTORIAL = [ex1_one_edge, ex2_theorem32, ex3_mb2_violation, ex4_critical_circle,
             ex5_morsification, ex6_cw_complexes]
-STRENGTH = [st1_nonorientable, st2_symmetry, st3_torus_height, st4_klein_bottle]
+STRENGTH = [st1_nonorientable, st2_symmetry, st3_torus_height, st4_klein_bottle,
+            st5_arrows_and_sharpness]
 
 
 def main(argv=None):

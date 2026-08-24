@@ -118,6 +118,104 @@ class TestDiscreteMorseFunctions(unittest.TestCase):
             self.assertEqual(r["M"], [ni, 2 * ni, ni])
             self.assertEqual(r["R_M"], [ni - 1, ni - 1])   # (ni - 1)(1 + t)
 
+    def test_arrowed_dmbf_is_sharp_and_has_arrows(self):
+        """矢印を持つ鋭い不変 DMBF（docs/results.md §3.6）。
+
+        高さ関数と同じ Σ_C P_t(C) = P_t(T^2)・R(t) = 0 を与えながら，
+        矢印をちょうど ni 本持つ（＝「鋭い不変 DMBF は矢印を持たない」は偽）。"""
+        for ni, nj in SIZES:
+            with self.subTest(ni=ni, nj=nj):
+                K = D.torus(ni, nj)
+                f = D.arrowed_dmbf(K, ni, nj)
+                r = D.MorseBott(K, f).report()
+                self.assertTrue(r["is_dmb"])
+                self.assertFalse(r["is_dmf"])            # 矢印と collection が同居する
+                self.assertTrue(D.is_invariant(ni, nj, f))
+                self.assertEqual(r["n_arrows"], ni)      # 軌道 1 本ぶん
+                self.assertEqual(r["MB_sum"], [1, 2, 1])
+                self.assertEqual(D.poly_trim(r["R_MB"]), [])
+                shapes = sorted(tuple(D.poly_trim(D.betti(C)))
+                                for C in r["reduced_collections"]
+                                if D.poly_trim(D.betti(C)))
+                self.assertEqual(shapes, [(0, 1, 1), (1, 1)])   # t + t^2 と 1 + t
+
+    def test_arrowed_dmbf_arrows_are_one_free_orbit(self):
+        """矢印は最上位の帯の横の辺 1 軌道ぶんだけ（帯の外には出ない）。"""
+        ni, nj = 5, 4
+        K = D.torus(ni, nj)
+        X = D.MorseBott(K, D.arrowed_dmbf(K, ni, nj))
+        arrows = X.arrows()
+        self.assertEqual(len(arrows), ni)
+        for s, t in arrows:
+            self.assertEqual(K.dim(s), 1)
+            self.assertEqual(K.dim(t), 2)
+            self.assertEqual({v[1] for v in s}, {nj - 1})   # 最上位の横の辺 ie
+            # 相手は 1 つ下の帯の上三角 tu（準位 nj-2 の頂点をちょうど 1 つ持つ）
+            self.assertEqual({v[1] for v in t}, {nj - 2, nj - 1})
+            self.assertEqual(sum(1 for v in t if v[1] == nj - 2), 1)
+        # 矢印の集合も Z_ni 不変
+        pairs = {(s, t) for s, t in arrows}
+        self.assertTrue(all((D.rotate(ni, nj, s), D.rotate(ni, nj, t)) in pairs
+                            for s, t in pairs))
+
+    def test_arrowed_dmbf_over_the_documented_range(self):
+        """docs/results.md §3.6 の「ni, nj ∈ {3,…,7} の 25 通りすべて」の裏付け。"""
+        n = 0
+        for ni in range(3, 8):
+            for nj in range(3, 8):
+                K = D.torus(ni, nj)
+                r = D.MorseBott(K, D.arrowed_dmbf(K, ni, nj)).report()
+                self.assertTrue(r["is_dmb"], (ni, nj))
+                self.assertEqual(r["n_arrows"], ni, (ni, nj))
+                self.assertEqual(r["MB_sum"], [1, 2, 1], (ni, nj))
+                self.assertEqual(D.poly_trim(r["R_MB"]), [], (ni, nj))
+                n += 1
+        self.assertEqual(n, 25)
+
+    def test_section_36_comparison_table(self):
+        """docs/results.md §3.6 の比較表の数値（腐らせないための検査）。"""
+        for ni, nj in SIZES:
+            with self.subTest(ni=ni, nj=nj):
+                K = D.torus(ni, nj)
+                rows = {name: (len(set(f.values())), D.MorseBott(K, f).report())
+                        for name, f in (
+                            ("height", D.height_fn(K, ni, nj)),
+                            ("arrowed", D.arrowed_dmbf(K, ni, nj)),
+                            ("dmf", D.invariant_dmf(K, ni, nj)))}
+                nvals, r = rows["height"]
+                self.assertEqual((nvals, r["collections"], r["n_arrows"]),
+                                 (nj // 2 + 1, 2 * (nj // 2), 0))
+                nvals, r = rows["arrowed"]
+                self.assertEqual((nvals, r["collections"], r["n_arrows"]), (2, 2, ni))
+                nvals, r = rows["dmf"]
+                self.assertEqual((nvals, r["collections"], r["n_arrows"]),
+                                 (6 * nj, 6 * ni * nj, ni * (3 * nj - 2)))
+
+    def test_any_band_may_be_lifted(self):
+        """持ち上げる帯はどれでもよい（j 方向の平行移動で移り合う）。
+
+        帯を 2 つ持ち上げると DMBF のままだが鋭さは失われる（§3.6 の「近くの反例」）。"""
+        ni, nj = 5, 5
+        K = D.torus(ni, nj)
+
+        def lift(bands):
+            def sel(c):
+                js = {v[1] % nj for v in c}
+                return len(c) > 1 and any(b in js and js <= {b, (b + 1) % nj}
+                                          for b in bands)
+            return {c: (1 if sel(c) else 0) for c in K.cells}
+
+        self.assertEqual(lift([nj - 1]), D.arrowed_dmbf(K, ni, nj))
+        for b in range(nj):
+            r = D.MorseBott(K, lift([b])).report()
+            self.assertTrue(r["is_dmb"], b)
+            self.assertEqual(r["n_arrows"], ni)
+            self.assertEqual(D.poly_trim(r["R_MB"]), [])
+        r2 = D.MorseBott(K, lift([0, 2])).report()          # 隣り合わない 2 本
+        self.assertTrue(r2["is_dmb"])
+        self.assertEqual(r2["MB_sum"], [2, 4, 2])
+        self.assertEqual(D.poly_trim(r2["R_MB"]), [1, 1])   # 1 + t，鋭くない
+
     def test_critical_cells_of_invariant_dmf_form_free_orbits(self):
         """不変な DMF の臨界セルは Z_ni の軌道の和なので，各次元で ni の倍数。"""
         ni, nj = 5, 4

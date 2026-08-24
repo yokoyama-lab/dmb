@@ -24,6 +24,7 @@ FUNCTIONS = {
     "morsified": lambda K, ni, nj: core.morsify(K, core.height_fn(K, ni, nj)),
     "dmf_min": lambda K, ni, nj: core.canonical_dmf(K),
     "dmf_invariant": lambda K, ni, nj: core.invariant_dmf(K, ni, nj),
+    "arrowed": lambda K, ni, nj: core.arrowed_dmbf(K, ni, nj),
 }
 
 # collection の塗り分けに使う色（RGB 0-255）。TikZ では \definecolor で定義する

@@ -99,7 +99,7 @@ export.py          figure export (TikZ needs nothing; HTML/PNG/SVG need plotly)
 dmb.py             Dash visualiser                                      dash/numpy/plotly
 pages.py           static-site export for GitHub Pages         dash/numpy/plotly/markdown
 dmf.py             the original discrete Morse figure (unchanged)       dash/numpy/plotly
-tests/             178 tests (visualiser tests skip when dash is absent)
+tests/             185 tests (visualiser tests skip when dash is absent)
 docs/results.md    results and proofs (layer A: machine-checked / layer B: on paper)
 docs/img/          figures used in the README
 ```
@@ -134,7 +134,7 @@ counterexample to Lemma 3.1 of v1 of the paper (see example 6 of
 
 ## Results
 
-Four things discrete Morse theory cannot do (`python3 examples.py strength`;
+Five things discrete Morse theory cannot do (`python3 examples.py strength`;
 proofs in [`docs/results.md`](docs/results.md)).
 
 **1. On spaces with torsion the discrete Morse inequality is never an equality.**
@@ -188,10 +188,18 @@ rotationally symmetric torus has critical circles of index 0 and 1, giving
 Σ_i t^λi P_t(S¹) = (1+t) + t(1+t) = 1 + 2t + t² = P_t(T²); the discrete version
 produces two reduced collections with P_t = 1+t and t+t².
 
+**5. Arrows (the gradient) and critical circles can coexist, and stay sharp.**
+Item 3 is sharp but has no arrows at all, and the invariant DMF of item 2 has
+arrows but is not sharp. Raising by one the value of every cell of dimension ≥ 1
+in the top band (`dmb_core.arrowed_dmbf`) gives a DMBF that is Z_ni-invariant and
+sharp (R(t) = 0) and yet has ni arrows (checked for ni, nj ∈ {3,…,7}). The
+exhaustive search agrees: most sharp invariant DMBFs have arrows — 558 out of 689
+for T(3,3) with two values. See [`docs/results.md`](docs/results.md) §3.6.
+
 ## Testing
 
 ```bash
-python3 -m unittest discover -s tests -t . -v          # 178 tests
+python3 -m unittest discover -s tests -t . -v          # 185 tests
 DMB_TRIALS=60 python3 -m unittest tests.test_properties   # more random trials
 DMB_SLOW=1    python3 -m unittest tests.test_search       # compare against brute force
 DMB_LATEX=1   python3 -m unittest tests.test_export       # actually compile the TikZ

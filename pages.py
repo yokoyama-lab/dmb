@@ -47,6 +47,10 @@ FIGURES = [
     {"slug": "dmf-invariant", "fkey": "dmf_invariant", "ni": 5, "nj": 4,
      "options": ["showCollection", "showArrow", "showWeak"],
      "blurb": "回転対称な DMF。対称性を保つと臨界セルは 4·n_i 個まで増える。"},
+    {"slug": "arrowed", "fkey": "arrowed", "ni": 5, "nj": 4,
+     "options": ["showCollection", "showArrow", "showWeak"],
+     "blurb": "矢印を持つ鋭い DMBF。高さ関数と同じ R(t) = 0 だが，"
+              "最上位の帯を持ち上げることで矢印が n_i 本現れる（§3.6）。"},
     {"slug": "dmf-py", "fkey": "dmf_py", "ni": 4, "nj": 4,
      "options": ["showCollection", "showArrow", "showWeak"],
      "blurb": "dmf.py の calcDMF が作る DMF（正方格子のみ）。"},

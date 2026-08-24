@@ -128,7 +128,7 @@ export.py          図の書き出し（TikZ は依存なし。HTML/PNG/SVG は 
 dmb.py             Dash による可視化                                   dash/numpy/plotly
 pages.py           GitHub Pages 用の静的サイトの書き出し          dash/numpy/plotly/markdown
 dmf.py             もとの離散モース関数の図示（変更していない）              dash/numpy/plotly
-tests/             検査（178 件。dash が無ければ可視化のぶんは skip）
+tests/             検査（185 件。dash が無ければ可視化のぶんは skip）
 docs/results.md    計算結果と証明（層 A: 機械確認 / 層 B: 紙の証明）
 docs/img/          README の図
 ```
@@ -161,7 +161,7 @@ collection が生まれます。(M1)(M3) は **irregular な face（任意余次
 
 ## 計算結果
 
-`python3 examples.py strength` が出す 4 つの強み（詳細と証明は [`docs/results.md`](docs/results.md)）。
+`python3 examples.py strength` が出す 5 つの強み（詳細と証明は [`docs/results.md`](docs/results.md)）。
 
 **1. ねじれのある空間では，離散モース不等式は決して等号にならない。**
 閉曲面は H₂(K; Z/2) ≠ 0 なのでどんな離散モース関数でも m₂ ≥ 1 ですが，
@@ -210,10 +210,17 @@ P_t(T²) を丸ごと担う自明な形だけです。たとえば T(4,4) では
 Σ_i t^λi P_t(S¹) = (1+t) + t(1+t) = 1 + 2t + t² = P_t(T²) となりますが，
 離散版でも 2 つの reduced collection が P_t = 1+t と t+t² を与えます。
 
+**5. 矢印（勾配）と臨界円周は同居でき，しかも鋭いまま。**
+上の 3 は鋭いですが矢印を 1 本も持たず，2 の不変な DMF は矢印を持ちますが鋭くありません。
+**最上位の帯の 1 次元以上のセルだけ値を 1 上げる**と（`dmb_core.arrowed_dmbf`），
+Z_ni 不変・R(t) = 0 のまま矢印を ni 本持つ DMBF になります（ni, nj ∈ {3,…,7} で確認）。
+全数探索でも，鋭い不変 DMBF の大多数は矢印を持ちます（T(3,3)・値 2 通りで 689 個中 558 個）。
+詳細は [`docs/results.md`](docs/results.md) §3.6。
+
 ## 検査
 
 ```bash
-python3 -m unittest discover -s tests -t . -v          # 178 件
+python3 -m unittest discover -s tests -t . -v          # 185 件
 DMB_TRIALS=60 python3 -m unittest tests.test_properties   # 乱択の試行を増やす
 DMB_SLOW=1    python3 -m unittest tests.test_search       # 総当たりとの突き合わせ
 DMB_LATEX=1   python3 -m unittest tests.test_export       # TikZ を実際に組む

@@ -8,6 +8,7 @@
 import itertools
 import os
 import unittest
+from collections import Counter
 
 import dmb_core as D
 import search as S
@@ -171,6 +172,33 @@ class TestExhaustive(unittest.TestCase):
         _, _, n_dmb = S.search(ni, nj, nv, sharp_only=True)
         self.assertEqual(n_dmb, brute)
         self.assertEqual(brute, 6522)
+
+    def test_arrowed_dmbf_is_found_by_the_search(self):
+        """`dmb_core.arrowed_dmbf` が全数探索の中にちゃんと現れること。
+
+        構成（手で書いた族）と全数探索（機械）が食い違っていないかの突き合わせ。"""
+        for ni, nj in ((3, 3), (4, 3)):
+            with self.subTest(ni=ni, nj=nj):
+                K = D.torus(ni, nj)
+                orbits = S.invariant_orbits(K, ni, nj)
+                f = D.arrowed_dmbf(K, ni, nj)
+                want = tuple(f[o[0]] for o in orbits)
+                hit = [r for vals, r in S.search(ni, nj, 2)[0] if vals == want]
+                self.assertEqual(len(hit), 1)
+                self.assertTrue(hit[0]["MB_sharp"])
+                self.assertEqual(hit[0]["n_arrows"], ni)
+
+    def test_sharp_invariant_dmbf_with_arrows_exist(self):
+        """**鋭い不変 DMBF は矢印を持たない，ではない**（docs/results.md §3.6）。
+
+        値 2 通りの時点で，鋭くて矢印を持つものが T(3,3) で 558 個ある
+        （高さ関数のように矢印が 1 本も無いものは 131 個）。"""
+        tally = Counter()
+        S.search(3, 3, 2, sink=lambda vals, r: tally.update(
+            [(r["MB_sharp"], r["n_arrows"] > 0)]))
+        self.assertEqual(tally[(True, True)], 558)
+        self.assertEqual(tally[(True, False)], 131)
+        self.assertEqual(sum(tally.values()), 6522)
 
     def test_classification_of_sharp_functions(self):
         """**鋭い不変 DMBF は 2 種類しかない**（T(3,3) と T(4,3)，値 2 通り）:
