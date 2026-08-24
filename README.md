@@ -95,6 +95,21 @@ K = D.cw_projective_plane_minimal()                            # RP^2（3 セル
 
 分割数の上限は `dmb.py` の `MAX_GRID`，ポートは末尾の `run(port=8050)` で変えられます。
 
+### 静的サイトの書き出し (`pages.py`)
+
+`dmb.py` は Dash（Flask サーバ）なので GitHub Pages には置けません。同じ図を
+plotly の自己完結 HTML としてあらかじめ書き出し，索引を付けて並べるのが `pages.py` です。
+
+```
+pip install -e ".[app,pages]"
+python3 pages.py -o _site        # _site/index.html ができる
+python3 -m http.server -d _site  # 手元で確認 → http://localhost:8000/
+```
+
+回転・ズーム・ホバーはブラウザ側で効きますが，関数や分割数の切り替えはできません
+（切り替えたいときは手元で `dmb.py` を動かします）。並べる図は `pages.py` の `FIGURES`，
+配備は `.github/workflows/pages.yml`（Settings → Pages → Source を "GitHub Actions" に）。
+
 ## ディレクトリ構成
 
 ```
@@ -106,8 +121,9 @@ examples.py        例集（理解のための小さい例と DMBT ならでは�
 search.py          Z_ni 不変な離散モースボット関数の全数探索                    依存なし
 export.py          図の書き出し（TikZ は依存なし。HTML/PNG/SVG は plotly）
 dmb.py             Dash による可視化                                   dash/numpy/plotly
+pages.py           GitHub Pages 用の静的サイトの書き出し          dash/numpy/plotly/markdown
 dmf.py             もとの離散モース関数の図示（変更していない）              dash/numpy/plotly
-tests/             検査（165 件。dash が無ければ可視化のぶんは skip）
+tests/             検査（177 件。dash が無ければ可視化のぶんは skip）
 docs/results.md    計算結果と証明（層 A: 機械確認 / 層 B: 紙の証明）
 docs/img/          README の図
 ```
@@ -192,7 +208,7 @@ P_t(T²) を丸ごと担う自明な形だけです。たとえば T(4,4) では
 ## 検査
 
 ```bash
-python3 -m unittest discover -s tests -t . -v          # 165 件
+python3 -m unittest discover -s tests -t . -v          # 177 件
 DMB_TRIALS=60 python3 -m unittest tests.test_properties   # 乱択の試行を増やす
 DMB_SLOW=1    python3 -m unittest tests.test_search       # 総当たりとの突き合わせ
 DMB_LATEX=1   python3 -m unittest tests.test_export       # TikZ を実際に組む

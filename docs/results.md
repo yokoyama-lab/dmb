@@ -278,7 +278,7 @@ v2 の Definition 12 は任意余次元に強めてあるので，この $f$ は
 
 ## 8. 検証の方法
 
-- **テスト 165 件**（`python3 -m unittest discover -s tests -t .`）。
+- **テスト 177 件**（`python3 -m unittest discover -s tests -t .`）。
   - `tests/test_dmb_core.py` — トーラス上の定理の再現。
   - `tests/test_complexes.py` — S^1, S^2, 円板, 円筒, メビウスの帯, RP^2, クラインの壺,
     非連結な複体でのホモロジーと理論。境界作用素の $\partial\circ\partial = 0$，

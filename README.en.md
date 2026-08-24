@@ -53,6 +53,7 @@ python3 complexes.py                 # catalogue of test complexes with Betti nu
 python3 search.py --ni 4 --nj 3 --values 2       # exhaustive search of invariant DMBFs
 python3 export.py --format tikz -o fig.tex       # TikZ figure for the paper
 python3 dmb.py                       # visualiser at http://127.0.0.1:8050/
+python3 pages.py -o _site            # static site for GitHub Pages (no server)
 python3 dmf.py                       # the original discrete Morse figure (unchanged)
 ```
 
@@ -93,8 +94,9 @@ examples.py        worked examples and the strengths of DMBT                    
 search.py          exhaustive search of Z_ni-invariant discrete Morse-Bott functions
 export.py          figure export (TikZ needs nothing; HTML/PNG/SVG need plotly)
 dmb.py             Dash visualiser                                      dash/numpy/plotly
+pages.py           static-site export for GitHub Pages         dash/numpy/plotly/markdown
 dmf.py             the original discrete Morse figure (unchanged)       dash/numpy/plotly
-tests/             165 tests (visualiser tests skip when dash is absent)
+tests/             177 tests (visualiser tests skip when dash is absent)
 docs/results.md    results and proofs (layer A: machine-checked / layer B: on paper)
 docs/img/          figures used in the README
 ```
@@ -186,7 +188,7 @@ produces two reduced collections with P_t = 1+t and t+t².
 ## Testing
 
 ```bash
-python3 -m unittest discover -s tests -t . -v          # 165 tests
+python3 -m unittest discover -s tests -t . -v          # 177 tests
 DMB_TRIALS=60 python3 -m unittest tests.test_properties   # more random trials
 DMB_SLOW=1    python3 -m unittest tests.test_search       # compare against brute force
 DMB_LATEX=1   python3 -m unittest tests.test_export       # actually compile the TikZ

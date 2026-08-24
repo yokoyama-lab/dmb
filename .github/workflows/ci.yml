@@ -35,7 +35,7 @@ jobs:
 
       - name: 可視化つきの検査
         run: |
-          pip install -e ".[app]"
+          pip install -e ".[app,pages]"
           python -m unittest discover -s tests -t . -v
 
   lint:

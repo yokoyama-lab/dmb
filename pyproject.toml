@@ -19,6 +19,7 @@ dependencies = []                     # 理論の計算は標準ライブラリ�
 
 [project.optional-dependencies]
 app = ["dash", "numpy", "plotly"]     # 可視化 (dmb.py) を動かす場合
+pages = ["markdown"]                  # GitHub Pages 用の書き出し (pages.py)
 dev = ["ruff"]                        # 静的検査
 
 [project.urls]
