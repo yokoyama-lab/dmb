@@ -128,7 +128,7 @@ export.py          図の書き出し（TikZ は依存なし。HTML/PNG/SVG は 
 dmb.py             Dash による可視化                                   dash/numpy/plotly
 pages.py           GitHub Pages 用の静的サイトの書き出し          dash/numpy/plotly/markdown
 dmf.py             もとの離散モース関数の図示（変更していない）              dash/numpy/plotly
-tests/             検査（188 件。dash が無ければ可視化のぶんは skip）
+tests/             検査（185 件。dash が無ければ可視化のぶんは skip）
 docs/results.md    計算結果と証明（層 A: 機械確認 / 層 B: 紙の証明）
 docs/img/          README の図
 ```
@@ -220,7 +220,7 @@ Z_ni 不変・R(t) = 0 のまま矢印を ni 本持つ DMBF になります（ni
 ## 検査
 
 ```bash
-python3 -m unittest discover -s tests -t . -v          # 188 件
+python3 -m unittest discover -s tests -t . -v          # 185 件
 DMB_TRIALS=60 python3 -m unittest tests.test_properties   # 乱択の試行を増やす
 DMB_SLOW=1    python3 -m unittest tests.test_search       # 総当たりとの突き合わせ
 DMB_LATEX=1   python3 -m unittest tests.test_export       # TikZ を実際に組む

@@ -344,7 +344,7 @@ v2 の Definition 12 は任意余次元に強めてあるので，この $f$ は
 
 ## 8. 検証の方法
 
-- **テスト 188 件**（`python3 -m unittest discover -s tests -t .`）。
+- **テスト 185 件**（`python3 -m unittest discover -s tests -t .`）。
   - `tests/test_dmb_core.py` — トーラス上の定理の再現。
   - `tests/test_complexes.py` — S^1, S^2, 円板, 円筒, メビウスの帯, RP^2, クラインの壺,
     非連結な複体でのホモロジーと理論。境界作用素の $\partial\circ\partial = 0$，
@@ -359,7 +359,6 @@ v2 の Definition 12 は任意余次元に強めてあるので，この $f$ は
     図形の座標（矢印が隣接セル間に収まる，点が軸の範囲に入る，3 次元の点がトーラス上に
     ある，着色時に三角形分割が見える）。`DMB_RENDER=1` で画像出力まで。
   - `tests/test_examples.py` — 実行可能な台本と，§1 の主張そのもの。
-  - `tests/test_smoothing.py` — 滑らかな Morse-Bott の離散化計画（[smoothing.md](smoothing.md)）の層 A 証拠。
 - **変異注入（負の対照）**で検出力を測っている: 辺 1 本の値を下げると (MB4) が破れることを
   全 48 本で確認（検出率 100%），頂点まわりの 2 本を下げると (MB2) が破れること，
   離散モース関数を壊すと (M2)/(M4) は破れるが (MB2)/(MB4) は残ること（＝離散モースボット
@@ -391,10 +390,6 @@ v2 の Definition 12 は任意余次元に強めてあるので，この $f$ は
 
 - ~~ねじれと対称性が同時に効く例~~ → §4（クラインの壺）。ただし下限を達成する
   不変 DMF の構成は未了。レンズ空間（3 次元でねじれ + 自由な $\mathbb{Z}_p$ 作用）は未着手。
-- **連続の Morse-Bott 関数を離散 Morse-Bott 関数で近似できるか**
-  （Gallais 2010・Benedetti 2016 の Morse-Bott 版）。予想の定式化・証明戦略・
-  層 A の証拠（紡錘形 S²・円筒・クラインの壺が滑らかな側の剰余 $R(t)$ と
-  係数体依存まで再現する）は **[smoothing.md](smoothing.md)** にまとめた。
 - 整数係数のままの Morse-Bott 不等式（ねじれ込みの $\sum_C P_t(C)$）が成り立つか。
   現在の検算は体の上のみ。
 - 「鋭い不変 DMBF は 2 種類」（§3.5）が一般の $n_i, n_j$ と任意の値の個数で成り立つかの証明。
