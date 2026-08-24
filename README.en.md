@@ -1,6 +1,9 @@
 # dmb — computing discrete Morse–Bott theory
 
 [![CI](https://github.com/yokoyama-lab/dmb/actions/workflows/ci.yml/badge.svg)](https://github.com/yokoyama-lab/dmb/actions/workflows/ci.yml)
+[![Pages](https://github.com/yokoyama-lab/dmb/actions/workflows/pages.yml/badge.svg)](https://yokoyama-lab.github.io/dmb/)
+
+**The figures are live at https://yokoyama-lab.github.io/dmb/** (rotate and zoom in the browser).
 
 Computes and visualises **discrete Morse–Bott functions** on finite complexes
 (simplicial complexes and CW complexes that need not be regular), following

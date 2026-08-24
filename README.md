@@ -1,6 +1,9 @@
 # dmb — 離散モースボット理論の計算
 
 [![CI](https://github.com/yokoyama-lab/dmb/actions/workflows/ci.yml/badge.svg)](https://github.com/yokoyama-lab/dmb/actions/workflows/ci.yml)
+[![Pages](https://github.com/yokoyama-lab/dmb/actions/workflows/pages.yml/badge.svg)](https://yokoyama-lab.github.io/dmb/)
+
+**図はブラウザで見られます → https://yokoyama-lab.github.io/dmb/**（回転・ズームができます）
 
 有限複体（単体的複体・正則とは限らない CW 複体）の上の**離散モースボット関数**
 (discrete Morse-Bott function) を計算し，図示します。定義と定理は
@@ -21,6 +24,8 @@
 
 矢印は strictly noncritical pair（離散モース関数のときは Forman の V-path），
 赤丸は weakly critical なセル（＝ reduced collection に入るセル）です。
+
+これらの図を関数ごとに並べたものが [GitHub Pages](https://yokoyama-lab.github.io/dmb/) にあります（[計算結果](https://yokoyama-lab.github.io/dmb/results.html) も同じ場所）。
 
 ## インストール
 
@@ -108,7 +113,7 @@ python3 -m http.server -d _site  # 手元で確認 → http://localhost:8000/
 
 回転・ズーム・ホバーはブラウザ側で効きますが，関数や分割数の切り替えはできません
 （切り替えたいときは手元で `dmb.py` を動かします）。並べる図は `pages.py` の `FIGURES`，
-配備は `.github/workflows/pages.yml`（Settings → Pages → Source を "GitHub Actions" に）。
+配備は `.github/workflows/pages.yml`（main への push で https://yokoyama-lab.github.io/dmb/ に出ます）。
 
 ## ディレクトリ構成
 

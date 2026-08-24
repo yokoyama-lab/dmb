@@ -57,7 +57,7 @@ jobs:
         with:
           python-version: "3.13"
       - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends
-              texlive-latex-base texlive-pictures
+              texlive-latex-base texlive-pictures texlive-latex-extra
       - run: DMB_LATEX=1 python -m unittest tests.test_export -v
 
   # 重い検査（乱択の試行増・全数探索との突き合わせ）は週 1 回
