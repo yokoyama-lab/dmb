@@ -8,6 +8,7 @@ dash / plotly / numpy が無ければ skip し，markdown の有無で results.h
     python3 -m unittest tests.test_pages -v
 """
 
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -61,6 +62,34 @@ class TestMarkdown(unittest.TestCase):
         self.assertIsNotNone(page)
         self.assertIn("MathJax", page)
         self.assertNotIn("@@MATH", page)
+
+
+class TestMarkdownSource(unittest.TestCase):
+    """原稿の側の検査（GitHub 上での見え方。依存ゼロなので常に走る）。
+
+    GitHub の Markdown は数式より先に backslash escape を解くので，数式の中の
+    `\\{` `\\#` は `{` `#` になってから KaTeX に渡る。`\\#` は
+    「You can't use 'macro parameter character #' in math mode」で落ち，
+    `\\{` は**黙って波括弧が消える**（集合の記法が崩れる）。Pages 側は
+    pages.py が数式を退避するので壊れず，GitHub 上だけが壊れるので気づきにくい。
+    英字だけの綴り（`\\lbrace` `\\lvert`）を使えばどちらでも読める。
+    """
+
+    #: CommonMark が escape として解く文字
+    PUNCT = set("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~")
+    DOCS = sorted(Path(__file__).resolve().parent.parent.glob("*.md")) + \
+        sorted((Path(__file__).resolve().parent.parent / "docs").glob("*.md"))
+
+    def test_no_backslash_escaped_punctuation_in_math(self):
+        bad = []
+        for path in self.DOCS:
+            text = path.read_text(encoding="utf-8")
+            for m in pages.MATH_RE.finditer(text):
+                for esc in re.finditer(r"\\(.)", m.group(0)):
+                    if esc.group(1) in self.PUNCT:
+                        line = text[:m.start()].count("\n") + 1
+                        bad.append(f"{path.name}:{line} {m.group(0)[:40]}")
+        self.assertEqual(bad, [], "GitHub 上で数式が壊れる書き方: " + "; ".join(bad))
 
 
 class TestFigureSpecs(unittest.TestCase):

@@ -80,7 +80,7 @@ $\varphi$ 方向の高さ $h(j) = \min(j, n_j - j)$ を頂点に与え，一般�
   残りの collection の $P_t$ は $0$（正則な帯は，その下側の境界円周に落ちるため）。
 - したがって
   $$\sum_C P_t(C) = (1+t) + t(1+t) = 1 + 2t + t^2 = P_t(T^2), \qquad R(t) = 0.$$
-  **離散モースボット不等式は等号**（$n_i \in \{3,\dots,6\}$, $n_j \in \{3,\dots,7\}$ の
+  **離散モースボット不等式は等号**（$n_i \in \lbrace 3,\dots,6\rbrace$, $n_j \in \lbrace 3,\dots,7\rbrace$ の
   全組合せで確認）。
 
 この関数はすべてのセルが weakly critical（$U^{\mathrm{snc}} = D^{\mathrm{snc}} = 0$）なので，
@@ -128,7 +128,7 @@ $j = 0$ から順に帯を下へ潰す，回転で不変な matching（`dmb_core
 
 $$M(t) = n_i (1 + 2t + t^2) = n_i \cdot P_t(T^2), \qquad R(t) = (n_i - 1)(1 + t).$$
 
-$n_i, n_j \in \{3,4,5,6\}$ の全組合せで確認した。
+$n_i, n_j \in \lbrace 3,4,5,6\rbrace$ の全組合せで確認した。
 
 ### 3.4 まとめ
 
@@ -234,7 +234,7 @@ reduced collection が $2 n_j$ 個（すべて非自明）になり，
 
 $$\sum_C P_t(C) = n_j (1 + 2t + t^2), \qquad R(t) = (n_j - 1)(1 + t) \ne 0$$
 
-となる（$n_i \in \{3,4,5\}$, $n_j \in \{3,\dots,6\}$ で確認）。§2 の高さ関数と
+となる（$n_i \in \lbrace 3,4,5\rbrace$, $n_j \in \lbrace 3,\dots,6\rbrace$ で確認）。§2 の高さ関数と
 同じ「高さ」を表しているのに鋭さが失われる。
 **「モースボット的な関数なら自動的に鋭くなる」わけではなく，collection の取り方
 （＝どこまで値を潰すか）が鋭さを決める**ことを示す例である。
@@ -278,7 +278,7 @@ v2 の Definition 12 は任意余次元に強めてあるので，この $f$ は
 
 ## 8. 検証の方法
 
-- **テスト 177 件**（`python3 -m unittest discover -s tests -t .`）。
+- **テスト 178 件**（`python3 -m unittest discover -s tests -t .`）。
   - `tests/test_dmb_core.py` — トーラス上の定理の再現。
   - `tests/test_complexes.py` — S^1, S^2, 円板, 円筒, メビウスの帯, RP^2, クラインの壺,
     非連結な複体でのホモロジーと理論。境界作用素の $\partial\circ\partial = 0$，
@@ -304,8 +304,8 @@ v2 の Definition 12 は任意余次元に強めてあるので，この $f$ は
   Lean 形式化の `Reduced`（セル単位の述語）とも一致する。
   実装当初は facet 関係の連結成分に分けていたが，定義に合わせて直した
   （$\sum_C P_t(C)$ は分け方に依らないので数値結果は変わらない）。
-- **論文の定理文の突き合わせ**: Theorem 3.2 の条件 (2) は「(i) $\#L = 1$，または
-  (ii) $\#L = 2$ かつ $L$ が reduced」で，(i) では reduced を要求しない。この非対称性は
+- **論文の定理文の突き合わせ**: Theorem 3.2 の条件 (2) は「(i) $\lvert L\rvert = 1$，または
+  (ii) $\lvert L\rvert = 2$ かつ $L$ が reduced」で，(i) では reduced を要求しない。この非対称性は
   実際に必要で（単射な DMF では singleton の collection は weakly critical とは限らない），
   property test がこれを検出した。
 
