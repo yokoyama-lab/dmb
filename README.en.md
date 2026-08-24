@@ -99,7 +99,7 @@ export.py          figure export (TikZ needs nothing; HTML/PNG/SVG need plotly)
 dmb.py             Dash visualiser                                      dash/numpy/plotly
 pages.py           static-site export for GitHub Pages         dash/numpy/plotly/markdown
 dmf.py             the original discrete Morse figure (unchanged)       dash/numpy/plotly
-tests/             185 tests (visualiser tests skip when dash is absent)
+tests/             188 tests (visualiser tests skip when dash is absent)
 docs/results.md    results and proofs (layer A: machine-checked / layer B: on paper)
 docs/img/          figures used in the README
 ```
@@ -199,7 +199,7 @@ for T(3,3) with two values. See [`docs/results.md`](docs/results.md) §3.6.
 ## Testing
 
 ```bash
-python3 -m unittest discover -s tests -t . -v          # 185 tests
+python3 -m unittest discover -s tests -t . -v          # 188 tests
 DMB_TRIALS=60 python3 -m unittest tests.test_properties   # more random trials
 DMB_SLOW=1    python3 -m unittest tests.test_search       # compare against brute force
 DMB_LATEX=1   python3 -m unittest tests.test_export       # actually compile the TikZ
