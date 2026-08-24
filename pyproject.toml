@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dmb"
+version = "0.2.0"
+description = "トーラス上の離散モースボット関数 (discrete Morse-Bott function) の計算と可視化"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { file = "LICENSE" }
+keywords = ["discrete Morse theory", "discrete Morse-Bott theory", "topology"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+dependencies = []                     # 理論の計算は標準ライブラリだけで動く
+
+[project.optional-dependencies]
+app = ["dash", "numpy", "plotly"]     # 可視化 (dmb.py) を動かす場合
+dev = ["ruff"]                        # 静的検査
+
+[project.urls]
+Homepage = "https://github.com/yokoyama-lab/dmb"
+Paper = "https://arxiv.org/abs/2511.07864"
+
+[tool.setuptools]
+py-modules = ["dmb_core", "complexes", "examples", "dmb", "dmf"]
+
+[tool.ruff]
+line-length = 96
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "C4"]
+ignore = ["E741"]
+
+[tool.ruff.lint.per-file-ignores]
+"dmf.py" = ["ALL"]                    # 学生のオリジナル。整形しない
+"dmb.py" = ["C408"]                   # dict(...) は Plotly の作法なので直さない
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
