@@ -68,7 +68,7 @@ $X \times [0,1]$ を組合せ的に collapse させる**ことである（Whiteh
 「正則な帯の collection が $\sum_C P_t(C)$ に寄与しない」ことだけで，
 これは制限ホモロジーの消滅 = **純代数的な条件**である。鍵は次の補題:
 
-**補題 L5（制限ホモロジー = 相対ホモロジー; 層 B, 証明 5 行の見込み）.**
+**補題 L5（制限ホモロジー = 相対ホモロジー; ⭐ 既に Lean 化済み）.**
 $g = $ `max_extension`$(h)$（頂点関数 $h$ の最大値拡張）とし，$K'$ を値 $c$ の
 collection の 1 つとする。$\overline{N}$ を $K'$ のセルの閉包，
 $\partial_- \overline{N} = \overline{N} \setminus K'$（値 $< c$ の face 全体）と
@@ -77,6 +77,12 @@ $(C_*(K'), \partial^{K'})$ は**商鎖複体 $C_*(\overline{N}) / C_*(\partial_-
 そのもの**である。ゆえに
 $$P_t(K') = P_t\bigl(|\overline{N}|, |\partial_-\overline{N}|; F\bigr)
 \quad(\text{相対単体的ホモロジー}).$$
+
+この同一視は，実は Collapse 定理の形式化プロジェクト
+（`tetsuo-jp/discrete-morse-bott`, 研究台帳 P-dmb-01）で
+**既に Lean で機械証明されている**（「$(C_*(C), \partial^C)$ が対
+$(\overline{C}, \overline{C} \setminus C)$ の相対鎖複体であること」まで Lean 化済み，
+2026-08-20 時点）。本計画はそれを滑らかな側と接続するだけでよい。
 
 これが効く理由: 三角形分割を $f$ の準位に適合させておけば，
 - **正則な帯**は $(X \times [0,1],\ X \times \lbrace 0 \rbrace)$ 型の対なので
@@ -183,7 +189,7 @@ D.MorseBott(K, f).report()               # R_MB = [] すなわち R = 0
 
 ## 8. 次の一手
 
-- [ ] L5 を紙で書き下ろす（5 行 + r-連結性の注意。離散側だけで閉じる）
+- [x] L5 は `tetsuo-jp/discrete-morse-bott`（P-dmb-01）で Lean 化済みと判明（2026-08-25）。紙の論文には引用または 5 行の証明を書けばよい
 - [ ] L1 の出典確定（Whitehead / Munkres / Gallais §3.2 の再利用）→ 要確認の解消
 - [ ] 臨界帯の局所モデル（円板束の fiberwise cone 三角形分割）で L4 を書く
 - [ ] $S^2 \times S^1$ の回転など，臨界多様体がトーラスになる 3 次元例を機械で追加
